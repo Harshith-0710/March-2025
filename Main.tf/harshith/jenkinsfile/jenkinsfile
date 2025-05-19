@@ -1,0 +1,73 @@
+# continious integration of java project
+
+pipeline{
+    agent any
+    
+    tools{
+        jdk 'java-11'
+        maven 'maven'
+    }
+
+    stages{
+        stage('git checkout'){
+            steps{
+                git branch: 'main' , url:'https://github.com/Harshith-0710/april-2025.git'
+            }
+        }
+
+        stage('Compile'){
+            steps{
+                sh "mvn compile"
+            }
+        }
+
+        stage('Build'){
+            steps{
+                sh "mvn clean install"
+            }
+        }
+
+        stage('Codescan'){
+            steps{
+                
+            }
+        }
+
+        stage('Build and tag'){
+            steps{
+                sh "docker build -t Harshith-0710"
+            }
+        }
+
+        stage('Docker image scan'){
+            steps{
+                sh "trivy image --format table -o trivy-image-report.html harshith-0710"
+            }
+        }
+
+        stage('Containerisation'){
+            steps{
+                sh```
+                   docker stop c1
+                   docker rm c1
+                   docker run -it -d --name c1 -p 9001:8000 harshith-0710
+                ```   
+            }
+        }
+
+        stage('login to dockerhub'){
+            steps{
+                script{
+
+                }
+
+            }
+        }
+
+        stage('Pushing image to repository'){
+            steps{
+                sh 'docker push harshith-0710'
+            }
+        }
+    }
+}

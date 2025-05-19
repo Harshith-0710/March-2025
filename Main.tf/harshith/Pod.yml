@@ -1,0 +1,11 @@
+api version: v1      # version of the object 
+kind: Pod            # k8 object 
+metadata:            # store the information of the object 
+  name: harshith     # should give exactly two spaces
+spec:
+  containers:
+  - name: ngnix
+    image: ngnix 
+    ports:
+    - containerPort: 80
+    
