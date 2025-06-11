@@ -1,0 +1,16 @@
+apiversion: v1
+kind: NameSpace
+metadata:
+  name: harshith
+---
+apiversion: v1
+kind: ResourceQuota
+metadata:
+  name: harshith-quota
+  namespace: harshith
+spec:
+  hard:
+    cpu: "1"
+    memory: "1Gi"
+    pods: "4"
+    service: "3"
