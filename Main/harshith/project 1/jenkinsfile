@@ -11,10 +11,10 @@ pipeline{
     stages{
         stage('git checkout'){
             steps{
-                git branch: 'main' , url:'https://github.com/Harshith-0710/april-2025.git'
+                git branch: 'main' , url:'https://github.com/ManojKRISHNAPPA/test-1.git'
             }
         }
-
+    
         stage('Compile'){             # compiles maven
             steps{
                 sh "mvn compile"
@@ -29,19 +29,21 @@ pipeline{
 
         stage('Codescan'){        # add the sonarqube credentials and the way to access it
             steps{
-                
+                 withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                    sh "mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}"
+                 }
             }
         }
 
         stage('Build and tag'){
             steps{
-                sh "docker build -t Harshith-0710"
+                sh "docker build -t manojkrishnappa/project:1"
             }
         }
 
         stage('Docker image scan'){
             steps{
-                sh "trivy image --format table -o trivy-image-report.html harshith-0710"
+                sh "trivy image --format table -o trivy-image-report.html manojkrishnappa/project:1"
             }
         }
 
@@ -50,7 +52,7 @@ pipeline{
                 sh```
                    docker stop c1
                    docker rm c1
-                   docker run -it -d --name c1 -p 9001:8000 harshith-0710
+                   docker run -it -d --name c1 -p 9001:8000 manojkrishnappa/project:1
                 ```   
             }
         }
@@ -58,15 +60,16 @@ pipeline{
         stage('login to dockerhub'){           # add the login credentials and the way to access 
             steps{
                 script{
-
-                }
-
+                     withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                     }   
+                }             
             }
         }
 
         stage('Pushing image to repository'){           # pushes the image/application to the repo 
             steps{
-                sh 'docker push harshith-0710'
+                sh 'docker push manojkrishnappa/project:1'
             }
         }
     }
