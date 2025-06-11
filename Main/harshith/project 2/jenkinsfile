@@ -14,8 +14,8 @@ pipeline{
         stage('git checkout'){
             steps{
                 script{
-                    dir("terraform"){
-                        git branch: 'terraform', url: 'https://github.com/Harshith-0710/March-2025.git'
+                    dir("main"){
+                        git branch: 'main', url: 'https://github.com/Harshith-0710/March-2025.git'
                     }
                 }
             }
