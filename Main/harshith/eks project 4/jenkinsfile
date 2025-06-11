@@ -12,7 +12,7 @@ pipeline {
         stage('checkout') {
             steps {
                 script {
-                    dir("terraform") {
+                    dir("eks project 4") {
                         git branch: 'main', url: 'https://github.com/Harshith-0710/March-2025.git'
                     }
                 }

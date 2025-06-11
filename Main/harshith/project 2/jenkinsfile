@@ -14,7 +14,7 @@ pipeline{
         stage('git checkout'){
             steps{
                 script{
-                    dir("main"){
+                    dir("project 2"){
                         git branch: 'main', url: 'https://github.com/Harshith-0710/March-2025.git'
                     }
                 }
